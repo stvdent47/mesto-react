@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App/App.jsx';
-import * as serviceWorker from './serviceWorker';
+import App from './App.jsx';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.querySelector('.root')
+  document.querySelector('#root')
 );
-serviceWorker.unregister();
