@@ -23,6 +23,7 @@ const PopupWithForm = (props) => {
           className='modal__close-button'
           type='button'
           aria-label='Закрыть'
+          onClick={props.onClose}
         ></button>
       </div>
     </div>

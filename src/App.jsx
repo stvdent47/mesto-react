@@ -22,13 +22,19 @@ const App = (props) => {
     setIsEditAvatarPopupOpen(true);
   };
 
+  const closeAllPopups = () => {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+  }
+
   return (
     <>
       <Header />
       <Main
-        onEditProfile={() => handleEditProfileClick()}
-        onAddPlace={() => handleAddPlaceClick()}
-        onEditAvatar={() => handleEditAvatarClick()}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onEditAvatar={handleEditAvatarClick}
       />
       <Footer />
       <PopupWithForm
@@ -36,6 +42,7 @@ const App = (props) => {
         title='Редактировать профиль'
         submitText='Сохранить'
         isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
         children={
           <>
             <input
@@ -76,6 +83,7 @@ const App = (props) => {
         title='Новое место'
         submitText='Сохранить'
         isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
         children={
           <>
             <input
@@ -108,6 +116,7 @@ const App = (props) => {
         title='Обновить аватар'
         submitText='Сохранить'
         isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
         children={
           <>
             <input
@@ -129,6 +138,8 @@ const App = (props) => {
         name='remove-card-modal'
         title='Вы уверены?'
         submitText='Да'
+
+
         children=''
       />
       <ImagePopup />
