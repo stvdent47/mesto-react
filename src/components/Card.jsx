@@ -1,12 +1,17 @@
 import React from 'react';
 
 const Card = (props) => {
+  const handleCardClick = () => {
+    props.onCardClick(props.card);
+  }
+  
   return (
     <li className='photo-elements__item'>
       <img
         className='photo-elements__image'
         src={props.link}
         alt={props.name}
+        onClick={handleCardClick}
       />
 
       <div className='photo-elements__caption'>
