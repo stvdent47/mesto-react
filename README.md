@@ -16,4 +16,4 @@
 - обновление аватара;
 - лайки (поставить и убрать).
 
-Ссылка на проект: https://stvdent47.github.io/mesto-react/index.html
+Ссылка на проект: https://stvdent47.github.io/mesto-react/
