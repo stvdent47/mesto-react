@@ -8,7 +8,6 @@ class Api {
    */
   _checkErrors(res) {
     if (res.ok) {
-      console.log(res, `Everything is good: ${res.status} ${res.statusText}`);
       return res.json();
     } else {
       return Promise.reject(`Something is wrong: 4 8 15 16 23 42 && ${res.status} ${res.statusText}`);
