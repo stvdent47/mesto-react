@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card.jsx';
 import profilePhoto from '../images/profile-photo.jpg';
-import api from '../utils/Api.js';
+import api from '../utils/api.js';
 
 const Main = (props) => {
   const [userName, setUserName] = useState('...');
@@ -10,18 +10,14 @@ const Main = (props) => {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api
-      .getProfileInfo()
+    Promise.all([api.getProfileInfo(), api.getCards()])
       .then((res) => {
-        setUserName(res.name);
-        setUserDescription(res.about);
-        setUserAvatar(res.avatar);
+        const [profileInfo, initialCards] = res;
+        setUserName(profileInfo.name);
+        setUserDescription(profileInfo.about);
+        setUserAvatar(profileInfo.avatar);
+        setCards(initialCards);
       })
-      .catch((err) => alert(err));
-
-    api
-      .getCards()
-      .then((res) => setCards(res))
       .catch((err) => alert(err));
   }, []);
 
