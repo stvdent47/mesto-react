@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card.jsx';
 import profilePhoto from '../images/profile-photo.jpg';
-import api from '../utils/api.js';
+import api from '../utils/Api.js';
 
 const Main = (props) => {
   const [userName, setUserName] = useState('...');
