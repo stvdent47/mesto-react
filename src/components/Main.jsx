@@ -55,11 +55,8 @@ const Main = (props) => {
           {cards.map((item) => {
             return (
               <Card
-                key={item._id}
-                link={item.link}
-                name={item.name}
-                likes={item.likes.length}
                 card={item}
+                key={item._id}
                 onCardClick={props.onCardClick}
               />
             );
