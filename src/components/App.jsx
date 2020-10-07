@@ -9,6 +9,8 @@ const App = (props) => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -22,11 +24,17 @@ const App = (props) => {
     setIsEditAvatarPopupOpen(true);
   };
 
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setIsImagePopupOpen(true);
+  };
+
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-  }
+    setIsImagePopupOpen(false);
+  };
 
   return (
     <>
@@ -35,6 +43,7 @@ const App = (props) => {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       />
       <Footer />
       <PopupWithForm
@@ -138,11 +147,14 @@ const App = (props) => {
         name='remove-card-modal'
         title='Вы уверены?'
         submitText='Да'
-
-
         children=''
       />
-      <ImagePopup />
+      <ImagePopup
+        name='pic-modal'
+        isOpen={isImagePopupOpen}
+        onClose={closeAllPopups}
+        card={selectedCard}
+      />
     </>
   );
 };
