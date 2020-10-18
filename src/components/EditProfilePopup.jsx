@@ -14,14 +14,18 @@ const EditProfilePopup = (props) => {
 
   const handleNameChange = (e) => {
     setName(e.target.value);
-  }
+  };
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
-  }
-  const handleSubmit = (e) => {
+  };
+  const handleEditSubmit = (e) => {
     e.preventDefault();
 
-  }
+    props.onUpdateUser({
+      name: name,
+      about: description,
+    });
+  };
 
   return (
     <PopupWithForm
@@ -30,7 +34,7 @@ const EditProfilePopup = (props) => {
       submitText='Сохранить'
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleEditSubmit}
       children={
         <>
           <input

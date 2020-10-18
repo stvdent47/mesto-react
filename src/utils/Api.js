@@ -41,8 +41,8 @@ class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        name: info[`profile-name`],
-        about: info[`profile-job`],
+        name: info.name,
+        about: info.about,
       }),
     }).then(this._checkErrors);
   }
