@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header.jsx';
 import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 import PopupWithForm from './PopupWithForm.jsx';
+import EditProfilePopup from './EditProfilePopup.jsx'
 import ImagePopup from './ImagePopup.jsx';
+import api from '../utils/api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const App = (props) => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -11,7 +14,16 @@ const App = (props) => {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
 
+  useEffect(() => {
+    api
+      .getProfileInfo()
+      .then(userInfo => {
+        setCurrentUser(userInfo);
+      })
+    }, []);
+    
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
@@ -37,7 +49,7 @@ const App = (props) => {
   };
 
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
         onEditProfile={handleEditProfileClick}
@@ -46,47 +58,8 @@ const App = (props) => {
         onCardClick={handleCardClick}
       />
       <Footer />
-      <PopupWithForm
-        name='edit-modal'
-        title='Редактировать профиль'
-        submitText='Сохранить'
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-        children={
-          <>
-            <input
-              type='text'
-              name='profile-name'
-              id='profile-name-input'
-              placeholder='Ваше имя'
-              className='modal__input'
-              required
-              minLength='2'
-              maxLength='40'
-              autoComplete='off'
-            />
-            <p
-              className='modal__input-error-message'
-              id='profile-name-error'
-            ></p>
-            <input
-              type='text'
-              name='profile-job'
-              id='profile-job-input'
-              placeholder='Ваша профессия'
-              className='modal__input'
-              required
-              minLength='2'
-              maxLength='200'
-              autoComplete='off'
-            />
-            <p
-              className='modal__input-error-message'
-              id='profile-job-error'
-            ></p>
-          </>
-        }
-      />
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+
       <PopupWithForm
         name='add-modal'
         title='Новое место'
@@ -155,7 +128,7 @@ const App = (props) => {
         onClose={closeAllPopups}
         card={selectedCard}
       />
-    </>
+    </ CurrentUserContext.Provider>
   );
 };
 

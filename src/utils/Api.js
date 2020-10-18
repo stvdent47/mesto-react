@@ -10,7 +10,9 @@ class Api {
     if (res.ok) {
       return res.json();
     } else {
-      return Promise.reject(`Something is wrong: 4 8 15 16 23 42 && ${res.status} ${res.statusText}`);
+      return Promise.reject(
+        `Something is wrong: 4 8 15 16 23 42 && ${res.status} ${res.statusText}`
+      );
     }
   }
   /**
@@ -19,9 +21,8 @@ class Api {
   getProfileInfo() {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: this._headers
-    })
-      .then(this._checkErrors);
+      headers: this._headers,
+    }).then(this._checkErrors);
   }
   /**
    * getting cards from the server
@@ -29,9 +30,8 @@ class Api {
   getCards() {
     return fetch(`${this._url}/cards`, {
       method: 'GET',
-      headers: this._headers
-    })
-    .then(this._checkErrors);
+      headers: this._headers,
+    }).then(this._checkErrors);
   }
   /**
    * editing user profile info on the server
@@ -42,10 +42,9 @@ class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: info[`profile-name`],
-        about: info[`profile-job`]
-      })
-    })
-      .then(this._checkErrors);
+        about: info[`profile-job`],
+      }),
+    }).then(this._checkErrors);
   }
   /**
    * updating profile avatar on the server
@@ -55,10 +54,9 @@ class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: avatarUrl
-      })
-    })
-      .then(this._checkErrors);
+        avatar: avatarUrl,
+      }),
+    }).then(this._checkErrors);
   }
   /**
    * adding a new card to the server
@@ -69,10 +67,9 @@ class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: name,
-        link: link
-      })
-    })
-    .then(this._checkErrors);
+        link: link,
+      }),
+    }).then(this._checkErrors);
   }
   /**
    * removing a card from the server
@@ -81,28 +78,23 @@ class Api {
     return fetch(`${this._url}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers,
-    })
-    .then(this._checkErrors);
+    }).then(this._checkErrors);
   }
   /**
-   * adding like to the server
+   * adding or removing like to/from the server
    */
-  addLike(cardId) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: 'PUT',
-      headers: this._headers,
-    })
-      .then(this._checkErrors);
-  }
-  /**
-   * removing like from the server
-   */
-  removeLike(cardId) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: 'DELETE',
-      headers: this._headers,
-    })
-      .then(this._checkErrors);
+  changeLikeCardStatus(cardId, isLiked) {
+    if (isLiked) {
+      return fetch(`${this._url}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: this._headers,
+      }).then(this._checkErrors);
+    } else {
+      return fetch(`${this._url}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: this._headers,
+      }).then(this._checkErrors);
+    }
   }
 }
 
@@ -110,7 +102,7 @@ const api = new Api({
   url: 'https://mesto.nomoreparties.co/v1/cohort-15',
   headers: {
     authorization: '1ed91742-56fd-4a56-812b-580db32d6be2',
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 export default api;
