@@ -16,7 +16,7 @@ class Api {
     }
   }
   /**
-   * getting profile info from the server
+   * @description getting profile info from the server
    */
   getProfileInfo() {
     return fetch(`${this._url}/users/me`, {
@@ -81,7 +81,9 @@ class Api {
     }).then(this._checkErrors);
   }
   /**
-   * adding or removing like to/from the server
+   * @description this method sends a fetch request adding or removing like depending on whether a card is liked or not
+   * @param {*} cardId is used to identify a card that is to changed
+   * @param {*} isLiked is used to identify whether a card is liked or not
    */
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked) {

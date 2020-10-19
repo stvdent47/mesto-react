@@ -7,6 +7,7 @@ const EditAvatarPopup = (props) => {
     e.preventDefault();
 
     props.onUpdateAvatar(inputRef.current.value);
+    inputRef.current.value = '';
   }
 
   return (
