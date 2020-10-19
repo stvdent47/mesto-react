@@ -3,9 +3,10 @@ import Header from './Header.jsx';
 import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 import PopupWithForm from './PopupWithForm.jsx';
-import EditProfilePopup from './EditProfilePopup.jsx'
+import EditProfilePopup from './EditProfilePopup.jsx';
+import EditAvatarPopup from './EditAvatarPopup.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import api from '../utils/api.js';
+import api from '../utils/api.js'
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const App = (props) => {
@@ -14,7 +15,11 @@ const App = (props) => {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({
+    name: '',
+    about: '',
+    avatar: ''
+  });
 
   useEffect(() => {
     api
@@ -27,6 +32,15 @@ const App = (props) => {
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
+  
+  const handleUpdateUser = (data) => {
+    api.editProfile(data)
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => alert(err));
+  }
 
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
@@ -35,6 +49,15 @@ const App = (props) => {
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   };
+
+  const handleUpdateAvatar = (url) => {
+    api.updateAvatar(url)
+      .then((res) => {
+        setCurrentUser({...currentUser, avatar: res.avatar});
+        closeAllPopups();
+      })
+      .catch(err => alert(err));
+  }
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -58,7 +81,7 @@ const App = (props) => {
         onCardClick={handleCardClick}
       />
       <Footer />
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
 
       <PopupWithForm
         name='add-modal'
@@ -93,35 +116,7 @@ const App = (props) => {
           </>
         }
       />
-      <PopupWithForm
-        name='avatar-update-modal'
-        title='Обновить аватар'
-        submitText='Сохранить'
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-        children={
-          <>
-            <input
-              type='url'
-              name='avatar-link'
-              id='avatar-link-input'
-              placeholder='Ссылка на картинку'
-              className='modal__input'
-              required
-            />
-            <p
-              className='modal__input-error-message'
-              id='avatar-link-error'
-            ></p>
-          </>
-        }
-      />
-      <PopupWithForm
-        name='remove-card-modal'
-        title='Вы уверены?'
-        submitText='Да'
-        children=''
-      />
+      <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
       <ImagePopup
         name='pic-modal'
         isOpen={isImagePopupOpen}

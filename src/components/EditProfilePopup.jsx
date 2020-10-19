@@ -4,25 +4,31 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const EditProfilePopup = (props) => {
   const currentUser = useContext(CurrentUserContext);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    
+    props.onUpdateUser({
+      name,
+      about: description,
+    });
+  };
+  
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
   }, [currentUser]);
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  }
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-  }
-
+  
   return (
     <PopupWithForm
       name='edit-modal'
@@ -30,7 +36,7 @@ const EditProfilePopup = (props) => {
       submitText='Сохранить'
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleEditSubmit}
       children={
         <>
           <input
@@ -66,5 +72,4 @@ const EditProfilePopup = (props) => {
     />
   );
 };
-
 export default EditProfilePopup;

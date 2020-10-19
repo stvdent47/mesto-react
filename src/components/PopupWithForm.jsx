@@ -11,8 +11,7 @@ const PopupWithForm = (props) => {
           name={`form-${props.name}`}
           className='modal__form'
           method='POST'
-          noValidate
-          onSubmit={props.handleSubmit}
+          onSubmit={props.onSubmit}
         >
           {props.children}
           <button type='submit' className='modal__button'>
