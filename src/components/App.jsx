@@ -6,7 +6,7 @@ import EditProfilePopup from './EditProfilePopup.jsx';
 import AddPlacePopup from './AddPlacePopup.jsx';
 import EditAvatarPopup from './EditAvatarPopup.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import api from '../utils/api.js';
+import api from '../utils/Api.js'
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const App = (props) => {
