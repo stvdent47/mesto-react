@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Card from './Card.jsx';
-import profilePhoto from '../images/profile-photo.jpg';
-import api from '../utils/api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const Main = (props) => {
-  const [userName, setUserName] = useState('...');
-  const [userDescription, setUserDescription] = useState('...');
-  const [userAvatar, setUserAvatar] = useState(profilePhoto);
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getProfileInfo(), api.getCards()])
-      .then((res) => {
-        const [profileInfo, initialCards] = res;
-        setUserName(profileInfo.name);
-        setUserDescription(profileInfo.about);
-        setUserAvatar(profileInfo.avatar);
-        setCards(initialCards);
-      })
-      .catch((err) => alert(err));
-  }, []);
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className='main'>
       <section className='profile'>
         <div className='profile__photo-container' onClick={props.onEditAvatar}>
-          <img src={userAvatar} alt='фото профиля' className='profile__photo' />
+          <img
+            src={currentUser.avatar}
+            alt='фото профиля'
+            className='profile__photo'
+          />
         </div>
 
         <div className='profile__info'>
           <div className='profile__title'>
-            <h1 className='profile__name'>{userName}</h1>
+            <h1 className='profile__name'>{currentUser.name}</h1>
             <button
               className='profile__edit-button'
               type='button'
@@ -39,7 +27,7 @@ const Main = (props) => {
             ></button>
           </div>
 
-          <p className='profile__description'>{userDescription}</p>
+          <p className='profile__description'>{currentUser.about}</p>
         </div>
 
         <button
@@ -52,12 +40,14 @@ const Main = (props) => {
 
       <section className='photo-elements'>
         <ul className='photo-elements__list'>
-          {cards.map((item) => {
+          {props.cards.map((item) => {
             return (
               <Card
                 card={item}
                 key={item._id}
                 onCardClick={props.onCardClick}
+                onCardLike={props.onCardLike}
+                onCardDelete={props.onCardDelete}
               />
             );
           })}
