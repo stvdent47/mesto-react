@@ -18,49 +18,6 @@ const App = (props) => {
     about: '',
     avatar: '',
   });
-
-  useEffect(() => {
-    api
-      .getProfileInfo()
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-      })
-      .catch((err) => alert(err));
-  }, []);
-  /**
-   * cards
-   */
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    api
-      .getCards()
-      .then((initialCards) => setCards(initialCards))
-      .catch((err) => alert(err));
-  }, []);
-
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-        setCards(newCards);
-      })
-      .catch((err) => alert(err));
-  };
-
-  const handleCardDelete = (card) => {
-    api
-      .removeCard(card._id)
-      .then(() => {
-        const newCards = cards.filter((item) => item._id !== card._id);
-        setCards(newCards);
-      })
-      .catch((err) => alert(err));
-  };
   /**
    * profile editing
    */
@@ -77,8 +34,15 @@ const App = (props) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.error(err));
   };
+  /**
+   * cards
+   */
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [cards, setCards] = useState([]);
+
   /**
    * new card adding
    */
@@ -92,14 +56,35 @@ const App = (props) => {
     api
       .addCard({
         name: data.name,
-        link: data.link
+        link: data.link,
       })
-      .then(res => {
-        setCards([...cards, res])
+      .then((res) => {
+        setCards([res, ...cards]);
         closeAllPopups();
       })
-    console.log(data)
-  }
+      .catch((err) => console.error(err));
+  };
+
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleCardDelete = (card) => {
+    api
+      .removeCard(card._id)
+      .then(() => {
+        const newCards = cards.filter((item) => item._id !== card._id);
+        setCards(newCards);
+      })
+      .catch((err) => console.error(err));
+  };
   /**
    * avatar updating
    */
@@ -116,7 +101,7 @@ const App = (props) => {
         setCurrentUser({ ...currentUser, avatar: res.avatar });
         closeAllPopups();
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.error(err));
   };
 
   const handleCardClick = (card) => {
@@ -130,6 +115,16 @@ const App = (props) => {
     setIsEditAvatarPopupOpen(false);
     setIsImagePopupOpen(false);
   };
+
+  useEffect(() => {
+    Promise.all([api.getProfileInfo(), api.getCards()])
+      .then((res) => {
+        const [userInfo, initialCards] = res;
+        setCurrentUser(userInfo);
+        setCards(initialCards);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
