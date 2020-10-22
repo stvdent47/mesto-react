@@ -9,7 +9,7 @@ import ImagePopup from './ImagePopup.jsx';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-const App = (props) => {
+const App = () => {
   /**
    * user
    */
