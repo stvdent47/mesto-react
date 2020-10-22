@@ -6,7 +6,7 @@ import EditProfilePopup from './EditProfilePopup.jsx';
 import AddPlacePopup from './AddPlacePopup.jsx';
 import EditAvatarPopup from './EditAvatarPopup.jsx';
 import ImagePopup from './ImagePopup.jsx';
-import api from '../utils/Api.js'
+import api from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 const App = (props) => {
@@ -22,19 +22,24 @@ const App = (props) => {
    * profile editing
    */
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [editSubmitButtonState, seteditSubmitButtonState] = useState('Сохранить');
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
 
   const handleUpdateUser = (data) => {
+    seteditSubmitButtonState('Сохранение...');
     api
       .editProfile(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        seteditSubmitButtonState('Сохранить');
+      });
   };
   /**
    * cards
@@ -42,17 +47,18 @@ const App = (props) => {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
-
   /**
    * new card adding
    */
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [addCardSubmitButtonState, setAddCardSubmitButtonState] = useState('Сохранить');
 
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   };
 
   const handleAddPlace = (data) => {
+    setAddCardSubmitButtonState('Сохранение...');
     api
       .addCard({
         name: data.name,
@@ -62,7 +68,10 @@ const App = (props) => {
         setCards([res, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setAddCardSubmitButtonState('Сохранить');
+      });
   };
 
   const handleCardLike = (card) => {
@@ -89,19 +98,24 @@ const App = (props) => {
    * avatar updating
    */
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [avatarUpdateSubmitButtonState, setAvatarUpdateSubmitButtonState] = useState('Сохранить');
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   };
 
   const handleUpdateAvatar = (url) => {
+    setAvatarUpdateSubmitButtonState('Сохранение...');
     api
       .updateAvatar(url)
       .then((res) => {
         setCurrentUser({ ...currentUser, avatar: res.avatar });
         closeAllPopups();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setAvatarUpdateSubmitButtonState('Сохранить');
+      });
   };
 
   const handleCardClick = (card) => {
@@ -143,17 +157,20 @@ const App = (props) => {
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={handleUpdateUser}
+        submitButtonState={editSubmitButtonState}
       />
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddPlace}
+        submitButtonState={addCardSubmitButtonState}
       />
 
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={handleUpdateAvatar}
+        submitButtonState={avatarUpdateSubmitButtonState}
       />
       <ImagePopup
         name='pic-modal'

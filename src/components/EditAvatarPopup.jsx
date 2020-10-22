@@ -14,7 +14,7 @@ const EditAvatarPopup = (props) => {
     <PopupWithForm
         name='avatar-update-modal'
         title='Обновить аватар'
-        submitText='Сохранить'
+        submitButtonState={props.submitButtonState}
         isOpen={props.isOpen}
         onClose={props.onClose}
         onSubmit={handleAvatarUpdateSubmit}
