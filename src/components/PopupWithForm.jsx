@@ -15,7 +15,7 @@ const PopupWithForm = (props) => {
         >
           {props.children}
           <button type='submit' className='modal__button'>
-            {props.submitText}
+            {props.submitButtonState}
           </button>
         </form>
 
