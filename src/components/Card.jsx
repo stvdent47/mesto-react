@@ -1,7 +1,7 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-const Card = (props) => {
+const Card = React.memo((props) => {
   const currentUser = React.useContext(CurrentUserContext);
   const isOwn = props.card.owner._id === currentUser._id;
   const cardDeleteButtonClassName = `photo-elements__delete-button ${!isOwn && 'photo-elements__delete-button_hidden'}`;
@@ -48,6 +48,6 @@ const Card = (props) => {
       </div>
     </li>
   );
-};
+});
 
 export default Card;
